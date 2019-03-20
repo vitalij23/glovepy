@@ -332,9 +332,22 @@ class Glove(object):
         best = np.argsort(dists)[::-1][:topn + len(all_words)]
 
         # ignore (don't return) words from the input
-        result = [(self.id2word[sim], float(dists[sim])) for sim in best if sim not in all_words][:topn]
-        return OrderedDict(result)
+        # ignore (don't return) words from the input
+        #result = [(self.id2word[sim], float(dists[sim])) for sim in best if sim not in all_words][:topn]
+        #print(best)
+        #print(sim)
+        result = []
+        for sim in best:
+            if sim not in all_words:
+                try:
+                    a = self.id2word[sim]
+                except KeyError:
+                    continue
+                b = dists[sim]
+                result += [(a, float(b))]
 
+        #print(result)
+        return OrderedDict(result[:topn])
 
     def word_vec(self, word, word_vec):
         """
